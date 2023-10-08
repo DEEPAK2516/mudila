@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Display</title>
+</head>
+<body>
+    <h1>Data from Raspberry Pi</h1>
+    <div id="data-container">
+        <!-- Data will be displayed here -->
+    </div>
+
+    <script>
+        // Function to update the data on the web page
+        function updateData(data) {
+            const dataContainer = document.getElementById("data-container");
+            dataContainer.innerHTML = `
+                <p>Temperature: ${data.temperature} °C</p>
+                <p>Humidity: ${data.humidity} %</p>
+                <!-- Add more data fields as needed -->
+            `;
+        }
+
+        // Fetch data from the server and update the web page
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/data'); // Endpoint for retrieving data
+                const data = await response.json();
+                updateData(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        // Update data on page load and refresh every 5 seconds
+        window.onload = fetchData;
+        setInterval(fetchData, 5000); // Refresh data every 5 seconds
+    </script>
+</body>
+</html>
